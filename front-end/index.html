@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Login</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<h2>Login</h2>
+
+<div class="box">
+    <input id="email" type="email" placeholder="Email"><br>
+    <input id="password" type="password" placeholder="Password"><br>
+    <button onclick="login()">Login</button>
+    <p>No account? <a href="signup.html">Sign up</a></p>
+</div>
+
+<script src="https://sdk.amazonaws.com/js/aws-sdk-2.1483.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/amazon-cognito-identity-js@6.2.0/dist/amazon-cognito-identity.min.js"></script>
+
+<script src="login.js"></script>
+</body>
+</html>
+

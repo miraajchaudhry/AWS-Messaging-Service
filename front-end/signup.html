@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Sign Up</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<h2>Create Account</h2>
+
+<div class="box">
+    <input id="email" type="email" placeholder="Email"><br>
+    <input id="password" type="password" placeholder="Password"><br>
+    <button onclick="signup()">Create Account</button>
+    <p>Already have an account? <a href="index.html">Login</a></p>
+</div>
+
+<script src="https://sdk.amazonaws.com/js/aws-sdk-2.1483.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/amazon-cognito-identity-js@6.2.0/dist/amazon-cognito-identity.min.js"></script>
+<script src="signup.js"></script>
+
+</body>
+</html>
+
