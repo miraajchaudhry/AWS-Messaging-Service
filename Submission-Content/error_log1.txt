@@ -1,0 +1,20 @@
+2025-12-03T06:53:04.197Z    undefined    ERROR    Uncaught Exception     
+{
+    "errorType": "Runtime.ImportModuleError",
+    "errorMessage": "Error: Cannot find module 'aws-sdk'\nRequire stack:\n- /var/task/index.js\n- /var/runtime/index.mjs",
+    "stack": [
+        "Runtime.ImportModuleError: Error: Cannot find module 'aws-sdk'",
+        "Require stack:",
+        "- /var/task/index.js",
+        "- /var/runtime/index.mjs",
+        "    at _loadUserApp (file:///var/runtime/index.mjs:1192:17)",
+        "    at async UserFunction.js.module.exports.load (file:///var/runtime/index.mjs:1235:21)",
+        "    at async start (file:///var/runtime/index.mjs:1454:23)",
+        "    at async file:///var/runtime/index.mjs:1464:1"
+    ]
+}
+
+INIT_REPORT Init Duration: 89.12 ms    Phase: invoke    Status: error    Error Type: Runtime.ImportModuleError
+START RequestId: 99787fcb-5801-4282-b4f0-ab7d4a4e3ff7 Version: $LATEST
+END RequestId: 99787fcb-5801-4282-b4f0-ab7d4a4e3ff7
+REPORT RequestId: 99787fcb-5801-4282-b4f0-ab7d4a4e3ff7    Duration: 102.69 ms    Billed Duration: 103 ms    Memory Size: 128 MB    Max Memory Used: 70 MB    Status: error    Error Type: Runtime.ImportModuleError
