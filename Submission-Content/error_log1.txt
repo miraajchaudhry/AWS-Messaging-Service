@@ -1,0 +1,28 @@
+```2025-12-03T17:47:43.849Z	5bda6940-5d6c-4f94-a6f7-b6e2b48f86c4	ERROR	Invoke Error 	
+{
+    "errorType": "AccessDeniedException",
+    "errorMessage": "User: arn:aws:sts::620339869704:assumed-role/Group9ImsStack-OnConnectFunctionServiceRole9DE3742C-5VsCNER845gk/Group9ImsStack-OnConnectFunctionEF88F5A4-Tr7S41kxI11P is not authorized to perform: dynamodb:PutItem on resource: arn:aws:dynamodb:us-east-1:620339869704:table/CCGroup9Table because no identity-based policy allows the dynamodb:PutItem action",
+    "code": "AccessDeniedException",
+    "message": "User: arn:aws:sts::620339869704:assumed-role/Group9ImsStack-OnConnectFunctionServiceRole9DE3742C-5VsCNER845gk/Group9ImsStack-OnConnectFunctionEF88F5A4-Tr7S41kxI11P is not authorized to perform: dynamodb:PutItem on resource: arn:aws:dynamodb:us-east-1:620339869704:table/CCGroup9Table because no identity-based policy allows the dynamodb:PutItem action",
+    "time": "2025-12-03T17:47:43.790Z",
+    "requestId": "P27BK36C22HB0T51ICPFK3VF83VV4KQNSO5AEMVJF66Q9ASUAAJG",
+    "statusCode": 400,
+    "retryable": false,
+    "retryDelay": 44.767248692304285,
+    "stack": [
+        "AccessDeniedException: User: arn:aws:sts::620339869704:assumed-role/Group9ImsStack-OnConnectFunctionServiceRole9DE3742C-5VsCNER845gk/Group9ImsStack-OnConnectFunctionEF88F5A4-Tr7S41kxI11P is not authorized to perform: dynamodb:PutItem on resource: arn:aws:dynamodb:us-east-1:620339869704:table/CCGroup9Table because no identity-based policy allows the dynamodb:PutItem action",
+        "    at Request.extractError (/var/runtime/node_modules/aws-sdk/lib/protocol/json.js:61:27)",
+        "    at Request.callListeners (/var/runtime/node_modules/aws-sdk/lib/sequential_executor.js:106:20)",
+        "    at Request.emit (/var/runtime/node_modules/aws-sdk/lib/sequential_executor.js:78:10)",
+        "    at Request.emit (/var/runtime/node_modules/aws-sdk/lib/request.js:686:14)",
+        "    at Request.transition (/var/runtime/node_modules/aws-sdk/lib/request.js:22:10)",
+        "    at AcceptorStateMachine.runTo (/var/runtime/node_modules/aws-sdk/lib/state_machine.js:14:12)",
+        "    at /var/runtime/node_modules/aws-sdk/lib/state_machine.js:26:10",
+        "    at Request.<anonymous> (/var/runtime/node_modules/aws-sdk/lib/request.js:38:9)",
+        "    at Request.<anonymous> (/var/runtime/node_modules/aws-sdk/lib/request.js:688:12)",
+        "    at Request.callListeners (/var/runtime/node_modules/aws-sdk/lib/sequential_executor.js:116:18)"
+    ]
+}
+
+END RequestId: 5bda6940-5d6c-4f94-a6f7-b6e2b48f86c4
+REPORT RequestId: 5bda6940-5d6c-4f94-a6f7-b6e2b48f86c4	Duration: 2358.48 ms	Billed Duration: 2359 ms	Memory Size: 128 MB	Max Memory Used: 88 MB	```
