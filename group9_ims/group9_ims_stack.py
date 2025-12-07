@@ -1,3 +1,4 @@
+import aws_cdk as cdk
 from aws_cdk import (
     # Duration,
     Stack,
@@ -8,8 +9,11 @@ from aws_cdk import (
     aws_s3_deployment as s3deploy,
     aws_dynamodb as dynamodb,
     aws_iam as iam,
+    aws_cloudfront as cf,
+    aws_cloudfront_origins as cf_origins,
     CfnOutput
 )
+
 from constructs import Construct
 
 class Group9ImsStack(Stack):
@@ -18,7 +22,7 @@ class Group9ImsStack(Stack):
         super().__init__(scope, construct_id, **kwargs)
 
         # The code that defines your stack goes here
-        # Lambdas
+        # Lambda functions' constructs
         on_connect = _lambda.Function(
             self, "OnConnectFunction",
             runtime=_lambda.Runtime.NODEJS_16_X,
@@ -54,41 +58,85 @@ class Group9ImsStack(Stack):
             code=_lambda.Code.from_asset("lambda")
         )
 
+        # Make Dymamo DB table
         table = dynamodb.Table.from_table_name(
-        self,
-        "ImportedCCGroup9Table",
-        "CCGroup9Table"
-    )
+           self, "ImportedCCGroup9Table",
+           "CCGroup9Table"
+        )
+
+        # give correct lambdas permission to read/write to table
         table.grant_read_write_data(on_connect)
         table.grant_read_write_data(on_disconnect)
         table.grant_read_write_data(send_message)
         table.grant_read_write_data(get_upload_url)
         table.grant_read_write_data(join_room)
 
-
-        # front end
-        bucket = s3.Bucket(self, "FrontendBucket",
-                website_index_document="index.html",
-                public_read_access=True,
-                block_public_access=s3.BlockPublicAccess(
-                        block_public_policy=False,
-                        block_public_acls=False,
-                        ignore_public_acls=False,
-                        restrict_public_buckets=False
-                )
+        # S3 bucket for front end
+        front_end_bucket = s3.Bucket(
+            self, "FrontEndBucket",
+            public_read_access=False,
+            block_public_access=s3.BlockPublicAccess.BLOCK_ALL,
+            removal_policy=cdk.RemovalPolicy.DESTROY
         )
 
-        bucket.grant_read_write(get_upload_url)
-
+        # deploy correct files into bucket
         s3deploy.BucketDeployment(self, "DeployFrontend",
             sources=[s3deploy.Source.asset("../group9_ims/front-end")],
-            destination_bucket=bucket
+            destination_bucket=front_end_bucket
         )
 
-        
+        # make access identity
+        oai = cf.OriginAccessIdentity(
+            self, "FrontEndOAI"
+        )
 
-        CfnOutput(self, "WebsiteURL", value=bucket.bucket_website_url)
+        # set origin
+        s3_origin = cf_origins.S3BucketOrigin.with_origin_access_identity(
+            front_end_bucket, origin_access_identity=oai
+        )
 
+        distribution = cf.Distribution(
+            self, "FrontEnd",
+            default_behavior=cf.BehaviorOptions(
+                origin=s3_origin,
+                viewer_protocol_policy=cf.ViewerProtocolPolicy.REDIRECT_TO_HTTPS
+            ),
+            default_root_object="index.html",
+            error_responses=[
+                cf.ErrorResponse(
+                    http_status=404,
+                    response_page_path="/notfound.html",
+                    response_http_status=404
+                )
+            ]
+        )
+
+        # Allow access identity to access bucket and its contents
+        front_end_bucket.add_to_resource_policy(
+            iam.PolicyStatement(
+                effect=iam.Effect.ALLOW,
+                actions=["s3:ListBucket"],
+                principals=[oai.grant_principal],
+                resources=[front_end_bucket.bucket_arn]
+            )
+        )   
+
+        front_end_bucket.add_to_resource_policy(
+            iam.PolicyStatement(
+                effect=iam.Effect.ALLOW,
+                actions=["s3:GetObject"],
+                principals=[oai.grant_principal],
+                resources=[front_end_bucket.arn_for_objects("*")]
+            )
+        )
+
+        # Output website url
+        CfnOutput(
+            self, "Website_URL",
+            value="https://" + distribution.distribution_domain_name
+        )
+
+        # Set Websocket API
         websocket_api = apigwv2.WebSocketApi(
             self, "group9_IMServiceAPI",
             route_selection_expression="$request.body.action"
